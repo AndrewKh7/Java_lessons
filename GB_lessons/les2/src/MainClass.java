@@ -52,10 +52,10 @@ public class MainClass {
         int[][] out_arr = new int[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                if (i == j)
+                if(i == j){
                     out_arr[i][j] = 1;
-                else
-                    out_arr[i][j] = 0;
+                    out_arr[i][n-j-1] = 1;
+                }
             }
         }
         return out_arr;
