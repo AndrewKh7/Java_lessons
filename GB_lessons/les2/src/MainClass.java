@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class MainClass {
@@ -14,8 +13,8 @@ public class MainClass {
         System.out.println(findMax(test_arr_task3));
         System.out.println(findMin(test_arr_task3));
         int[] test_arr_task6_1 = {1,1,1,2,1};
-        int[] test_arr_task6_2 = {1,2,3};
-        System.out.println("test1: " + leftEqRight(test_arr_task6_1) + " ;test2: " + leftEqRight(test_arr_task6_2));
+        int[] test_arr_task6_2 = {1,2,8};
+        System.out.println("test1: " + CheckBalance(test_arr_task6_1) + " ;test2: " + CheckBalance(test_arr_task6_2));
         int[] test_arr_task7 = {1,2,3,4,5,6,7};
 //        shiftArr(test_arr_task7, 3);
 //        System.out.println(Arrays.toString(test_arr_task7));
@@ -54,7 +53,7 @@ public class MainClass {
             for (int j = 0; j < n; j++) {
                 if(i == j){
                     out_arr[i][j] = 1;
-                    out_arr[i][n-j-1] = 1;
+                    out_arr[i][n-j-1 ] = 1;
                 }
             }
         }
@@ -82,7 +81,7 @@ public class MainClass {
         return res;
     }
 
-    static boolean leftEqRight(int[] arr){
+    static boolean CheckBalance(int[] arr){
         int left = 0;
         int right = arr.length - 1;
         int sum = 0;
