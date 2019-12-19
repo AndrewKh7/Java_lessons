@@ -15,7 +15,7 @@ public class MainClass {
         int[] test_arr_task6_1 = {1,1,1,2,1};
         int[] test_arr_task6_2 = {1,2,8};
         System.out.println("test1: " + CheckBalance(test_arr_task6_1) + " ;test2: " + CheckBalance(test_arr_task6_2));
-        int[] test_arr_task7 = {1,2,3,4,5,6,7};
+        int[] test_arr_task7 = {};
         shiftArr(test_arr_task7, -8);
         System.out.println(Arrays.toString(test_arr_task7));
         shiftArr(test_arr_task7, 3);
@@ -100,22 +100,25 @@ public class MainClass {
             return sum == 0;
     }
 
-    static void shiftArr(int[] arr, int n){
+    static int[] shiftArr(int[] arr, int n){
+        if (arr.length == 0) return arr;
         int temp = arr[0];
+
         int cnt = n % arr.length;
-        int first_id = 0;
+        int first_index = 0;
         for (int i = 0; i < arr.length; i++) {
                 if(cnt >= arr.length) cnt -= arr.length;
                 if(cnt < 0 ) cnt += arr.length;
                 arr[cnt] = arr[cnt]+temp-(temp = arr[cnt]); //swap
-            if (cnt == first_id) {
-                first_id += 1;
-                temp = arr[first_id];
+            if (cnt == first_index) {
+                first_index += 1;
+                temp = arr[first_index];
                 cnt += n + 1;
             }else{
                 cnt += n;
             }
         }
+        return arr;
     }
 
 }
