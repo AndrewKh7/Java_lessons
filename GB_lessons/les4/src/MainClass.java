@@ -6,7 +6,7 @@ public class MainClass {
     static int field_size_x = 3;
     static int field_size_y = 3;
     static int quantity =3;
-    static char[][] field = new char[field_size_y][field_size_x ];
+    static char[][] field;
 
     static char USER_DOT = 'X';
     static char AI_DOT = 'O';
@@ -18,7 +18,7 @@ public class MainClass {
     static Random rand = new Random();
 
     public static void main(String[] args) {
-        initField();
+        field = initField();
         printField();
         int check_win;
         int i = 0;
@@ -51,14 +51,25 @@ public class MainClass {
         }
     }
 
-    public static void initField(){
-        if (quantity > field_size_y || quantity > field_size_x)
-                quantity = 3;
+    public static char[][] initField(){
+        System.out.print("Введите размер поля x:");
+        field_size_x = scanner.nextInt();
+        System.out.print("Введите размер поля y:");
+        field_size_y = scanner.nextInt();
+        System.out.print("Введите количество подряд идущих знаков для победы: ");
+        quantity = scanner.nextInt();
+        if (field_size_y < 3) field_size_y = 3;
+        if (field_size_x < 3) field_size_x = 3;
+        if (quantity > field_size_y || quantity > field_size_x || quantity < 3) {
+            quantity = field_size_y < field_size_x ? field_size_y : field_size_x;
+        }
+        char[][] temp = new char[field_size_y][field_size_x ];
         for (int i = 0; i < field_size_x ; i++) {
             for (int j = 0; j < field_size_y; j++) {
-               field[i][j] = '.';
+               temp[i][j] = '.';
             }
         }
+        return temp;
     }
 
     public static void printField(){
