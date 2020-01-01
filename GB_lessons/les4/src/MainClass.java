@@ -1,9 +1,11 @@
 import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class MainClass {
     static int field_size_x = 3;
     static int field_size_y = 3;
+    static int quantity =3;
     static char[][] field = new char[field_size_y][field_size_x ];
 
     static char USER_DOT = 'X';
@@ -50,6 +52,8 @@ public class MainClass {
     }
 
     public static void initField(){
+        if (quantity > field_size_y || quantity > field_size_x)
+                quantity = 3;
         for (int i = 0; i < field_size_x ; i++) {
             for (int j = 0; j < field_size_y; j++) {
                field[i][j] = '.';
@@ -107,24 +111,51 @@ public class MainClass {
     }
 
     public static boolean checkWin(int x, int y, char dot){
-        int cnt = 1;
-        int i = x+1;
-//        while (i<field_size_x)
-//            if(field[y][i++] == dot)
-//                ++cnt;
-//            else
-//                break;
-        while( i<field_size_x ? (field[y][i++]==dot ? ++cnt!=0 : false) : false){}
-//        i = x -1;
-//        while (i>=0)
-//            if(field[y][i--] == dot)
-//                ++cnt;
-//            else
-//                break;
-        i = x-1;
-        while( i>=0 ? (field[y][i--]==dot ? ++cnt!=0 : false) : false){}
+        for (int i = 0; i < 4; i++) {
+            if( countingDot(x, y, i, dot) + countingDot(x, y, i+4 , dot) - 1 == quantity )
+                return true;
+        }
 
-        if(cnt>=3) return true;
-        return  false;
+        return false;
+    }
+
+    public static int countingDot(int x, int y, int dir, char dot){
+        int cnt = 0;
+        while ( x >= 0 && y >= 0 && x < field_size_x && y <  field_size_y && field[y][x] == dot) {
+            cnt += 1;
+            switch (dir) {
+                case 0:
+                    --x;
+                    break;
+                case 1:
+                    --x;
+                    --y;
+                    break;
+                case 2:
+                    --y;
+                    break;
+                case 3:
+                    --y;
+                    ++x;
+                    break;
+                case 4:
+                    ++x;
+                    break;
+                case 5:
+                    ++x;
+                    ++y;
+                    break;
+                case 6:
+                    ++y;
+                    break;
+                case 7:
+                    ++y;
+                    --x;
+                    break;
+                default:
+                    return -1;
+            }
+        }
+        return cnt;
     }
 }
