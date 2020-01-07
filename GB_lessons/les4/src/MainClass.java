@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ScheduledExecutorService;
@@ -7,6 +8,7 @@ public class MainClass {
     static int field_size_y = 3;
     static int quantity =3;
     static char[][] field;
+    static int[] win_dot;
 
     static char USER_DOT = 'X';
     static char AI_DOT = 'O';
@@ -22,9 +24,12 @@ public class MainClass {
         printField();
         int check_win;
         int i = 0;
+        int temp = 0;
         while( i < field_size_y*field_size_y) {
             nextUserTurn();
-            if (checkWin(last_point_x, last_point_y, USER_DOT)){
+            temp = prewinDot(last_point_x, last_point_y,USER_DOT);
+//            if (checkWin(last_point_x, last_point_y, USER_DOT)){
+            if(temp == 1) {
                 printField();
                 System.out.println("User win!");
                 break;
@@ -35,12 +40,20 @@ public class MainClass {
                 System.out.println("Draw!");
                 break;
             }
-            nextAITurn();
+            if (temp == 2){
+                setDOT(win_dot[0],win_dot[1],AI_DOT);
+                System.out.println(win_dot[0] + " " + win_dot[1]);
+            }
+            else
+                nextAITurn();
             printField();
-            if(checkWin(last_point_x, last_point_y,AI_DOT)){
+            temp = prewinDot(last_point_x, last_point_y,AI_DOT);
+//            if(checkWin(last_point_x, last_point_y,AI_DOT)){
+            if (temp == 1){
                 System.out.println("AI win!");
                 break;
             }
+
 
             if (i == field_size_y*field_size_y) {
                 printField();
@@ -63,6 +76,7 @@ public class MainClass {
         if (quantity > field_size_y || quantity > field_size_x || quantity < 3) {
             quantity = field_size_y < field_size_x ? field_size_y : field_size_x;
         }
+        System.out.println(quantity);
         char[][] temp = new char[field_size_y][field_size_x ];
         for (int i = 0; i < field_size_x ; i++) {
             for (int j = 0; j < field_size_y; j++) {
@@ -126,7 +140,6 @@ public class MainClass {
             if( countingDot(x, y, i, dot) + countingDot(x, y, i+4 , dot) - 1 == quantity )
                 return true;
         }
-
         return false;
     }
 
@@ -168,5 +181,75 @@ public class MainClass {
             }
         }
         return cnt;
+    }
+
+    public static int prewinDot(int x, int y, char dot) {
+        int ret_val = 0;
+        int up = 0;
+        int down = 0;
+        int temp_x = 0;
+        int temp_y = 0;
+        int max = 0;
+        for (int i = 0; i < 4; i++) {
+//            if (ret_val != 0) break;
+            up = countingDot(x, y, i, dot);
+            down = countingDot(x, y, i+4 , dot);
+            if( (up + down - 1 >= quantity - 2) && (up + down - 1 > max) ) {
+                max = up + down - 1;
+                switch (i) {
+                    case 0:
+                        if (x >= up)
+                            if (rememberWinPoint(x - up, y))
+                                ret_val = 2;
+                        if (x + down < field_size_x)
+                            if (rememberWinPoint(x + down, y))
+                                ret_val = 2;
+                        break;
+                    case 1:
+                        if (x >= up && y >= up)
+                            if (rememberWinPoint(x - up, y - up))
+                                ret_val = 2;
+                        if (x + down < field_size_x && y + down < field_size_y)
+                            if (rememberWinPoint(x + down, y + down))
+                                ret_val = 2;
+                        break;
+                    case 2:
+                        if (y >= up)
+                            if (rememberWinPoint(x, y - up))
+                                ret_val = 2;
+                        if (y + down < field_size_y)
+                            if (rememberWinPoint(x, y + down))
+                                if (rememberWinPoint(x, y + down))
+                                    ret_val = 2;
+                        break;
+                    case 3:
+                        if (x + up < field_size_x && y >= up)
+                            if (rememberWinPoint(x + up, y - up))
+                                ret_val = 2;
+                        if (x > down && y + down < field_size_y)
+                            if (rememberWinPoint(x - down, y + down))
+                                ret_val = 2;
+                        break;
+                    default:
+                        ret_val = 0;
+                        break;
+                }
+            }
+            if ( up + down -1 >= quantity)
+                ret_val = 1;
+        }
+        return ret_val;
+    }
+
+    public static boolean rememberWinPoint(int x, int y) {
+        if (field[y][x] == '.') {
+            win_dot = new int[2];
+            win_dot[0] = x;
+            win_dot[1] = y;
+            return true;
+        }else{
+            return false;
+        }
+
     }
 }

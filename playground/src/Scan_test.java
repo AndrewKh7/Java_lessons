@@ -15,7 +15,8 @@ public class Scan_test {
         String str2 = "hello";
         str1 = str1+"2";
 
-        System.out.printf("%s == %s : %b", str1, str2, str1 == str2);
+        System.out.printf("%s == %s : %b\n", str1, str2, str1 == str2);
+        System.out.println(2);
         int[][] arr = new int[5][4];
     }
 }
