@@ -8,7 +8,7 @@ public class MainClass {
     static int field_size_y = 3;
     static int quantity =3;
     static char[][] field;
-    static int[] win_dot;
+    static int[] win_dot = new int[2]; //[0] - x; [1] - y;
 
     static char USER_DOT = 'X';
     static char AI_DOT = 'O';
@@ -25,6 +25,7 @@ public class MainClass {
         int check_win;
         int i = 0;
         int temp = 0;
+        //TODO: refactoring cycle (if i%2 then user turn, else AI turn )
         while( i < field_size_y*field_size_y) {
             nextUserTurn();
             temp = prewinDot(last_point_x, last_point_y,USER_DOT);
@@ -65,9 +66,9 @@ public class MainClass {
     }
 
     public static char[][] initField(){
-        System.out.print("Введите размер поля x:");
+        System.out.print("Введите размер поля x: ");
         field_size_x = scanner.nextInt();
-        System.out.print("Введите размер поля y:");
+        System.out.print("Введите размер поля y: ");
         field_size_y = scanner.nextInt();
         System.out.print("Введите количество подряд идущих знаков для победы: ");
         quantity = scanner.nextInt();
@@ -136,8 +137,10 @@ public class MainClass {
     }
 
     public static boolean checkWin(int x, int y, char dot){
-        for (int i = 0; i < 4; i++) {
-            if( countingDot(x, y, i, dot) + countingDot(x, y, i+4 , dot) - 1 == quantity )
+        int up;
+        int down;
+        for (int dir = 0; dir < 4; dir++) {
+            if( countingDot(x, y, dir, dot) + countingDot(x, y, dir+4 , dot) - 1 == quantity )
                 return true;
         }
         return false;
@@ -145,7 +148,7 @@ public class MainClass {
 
     public static int countingDot(int x, int y, int dir, char dot){
         int cnt = 0;
-        while ( x >= 0 && y >= 0 && x < field_size_x && y <  field_size_y && field[y][x] == dot) {
+        while ( x >= 0 && y >= 0 && x < field_size_x && y <  field_size_y && (field[y][x] == dot || field[y][x] == '.') ) {
             cnt += 1;
             switch (dir) {
                 case 0:
@@ -183,62 +186,154 @@ public class MainClass {
         return cnt;
     }
 
+    public static int[] shortViewOfDotArray(int x, int y, int dir, int num, char dot){
+        char prev_dot = field[y][x];
+        int cnt = 0;
+        int index = 0;
+        int[] short_arr = new int[num];
+        for (int i = 0; i < num; i++) {
+            if ( field[y][x] == prev_dot )
+                ++cnt;
+            else{
+                if (prev_dot == '.')
+                    short_arr[index] = -cnt;
+                else
+                    short_arr[index] = cnt;
+                cnt = 1;
+                ++index;
+                prev_dot = field[y][x];
+            }
+            switch (dir) {
+                case 0:
+                    ++x;
+                    break;
+                case 1:
+                    ++x;
+                    ++y;
+                    break;
+                case 2:
+                    ++y;
+                    break;
+                case 3:
+                    ++y;
+                    --x;
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (prev_dot == '.')
+            short_arr[index] = -cnt;
+        else
+            short_arr[index] = cnt;
+
+
+        return short_arr;
+    }
+
     public static int prewinDot(int x, int y, char dot) {
         int ret_val = 0;
         int up = 0;
         int down = 0;
-        int temp_x = 0;
-        int temp_y = 0;
+        int point = -1;
         int max = 0;
-        for (int i = 0; i < 4; i++) {
-//            if (ret_val != 0) break;
-            up = countingDot(x, y, i, dot);
-            down = countingDot(x, y, i+4 , dot);
-            if( (up + down - 1 >= quantity - 2) && (up + down - 1 > max) ) {
-                max = up + down - 1;
-                switch (i) {
+        int dir;
+        int[] arr = null;
+        for ( dir = 0 ; dir < 4; dir++) {
+            up = countingDot(x, y, dir, dot);
+            down = countingDot(x, y, dir + 4 , dot);
+
+                switch (dir) {
                     case 0:
-                        if (x >= up)
-                            if (rememberWinPoint(x - up, y))
-                                ret_val = 2;
-                        if (x + down < field_size_x)
-                            if (rememberWinPoint(x + down, y))
-                                ret_val = 2;
+                        arr = shortViewOfDotArray(x - up + 1, y, dir, up + down - 1, dot);
                         break;
                     case 1:
-                        if (x >= up && y >= up)
-                            if (rememberWinPoint(x - up, y - up))
-                                ret_val = 2;
-                        if (x + down < field_size_x && y + down < field_size_y)
-                            if (rememberWinPoint(x + down, y + down))
-                                ret_val = 2;
+                        arr = shortViewOfDotArray(x - up + 1, y - up + 1, dir, up + down - 1, dot);
                         break;
                     case 2:
-                        if (y >= up)
-                            if (rememberWinPoint(x, y - up))
-                                ret_val = 2;
-                        if (y + down < field_size_y)
-                            if (rememberWinPoint(x, y + down))
-                                if (rememberWinPoint(x, y + down))
-                                    ret_val = 2;
+                        arr = shortViewOfDotArray(x, y - up + 1, dir, up + down - 1, dot);
                         break;
                     case 3:
-                        if (x + up < field_size_x && y >= up)
-                            if (rememberWinPoint(x + up, y - up))
-                                ret_val = 2;
-                        if (x > down && y + down < field_size_y)
-                            if (rememberWinPoint(x - down, y + down))
-                                ret_val = 2;
+                        arr = shortViewOfDotArray(x + up - 1, y - up + 1, dir, up + down - 1, dot);
                         break;
                     default:
-                        ret_val = 0;
+                        arr = new int[1];
                         break;
                 }
+                point = checkWinLine(arr);
+                if (point >= 0){
+                    ret_val = 2;
+                    break;
+                }
+                if (point == -2){
+                    ret_val = 0;
+                }
             }
-            if ( up + down -1 >= quantity)
-                ret_val = 1;
+        int add_val = 0;
+        if (arr != null && point != -1) {
+            for (int i = 0; i <= point; i++)
+                add_val += (arr[i] < 0) ? -arr[i] : arr[i];
+
+//            System.out.println("dir: " + dir);
+            switch (dir) {
+                case 0:
+                    win_dot[0] = x - up + add_val ;
+                    win_dot[1] = y;
+                    break;
+                case 1:
+                    win_dot[1] = y - up + add_val;
+                    win_dot[0] = x - up + add_val;
+                    break;
+                case 2:
+                    win_dot[0] = x;
+                    win_dot[1] = y - up + add_val;
+                    break;
+                case 3:
+                    win_dot[0] = x + up - add_val;
+                    win_dot[1] = y - up + add_val;
+                    break;
+                default:
+                    break;
+            }
         }
         return ret_val;
+    }
+
+    public static int checkWinLine(int[] line) {
+        int res = -1;
+//        System.out.println("line: " + Arrays.toString(line));
+        for (int i = 0; i < line.length && line[i] != 0;  ++i) {
+            if (line[i] >= quantity){
+                res = -2;
+                break;
+            }
+            if (line[i] == -1 ){
+                if (i == 0){
+                    if (line[i+1] == quantity - 1) {
+                        res = i;
+                        break;
+                    }
+                }
+                 else if (i == line.length - 1 || line[i+1] == 0){
+                    if (line[i-1] >= quantity-1) {
+                        res = i;
+                        break;
+                    }
+                } else if (line[i-1] + line[i+1] >= quantity ){
+                    res = i;
+                    break;
+                }
+            }
+            if (line[i] == quantity - 2 && i != 0 && i != line.length - 1){
+                if ( line[i-1] + line[i+1] <= -3){
+                    res = i - 1;
+                    break;
+                }
+            }
+
+        }
+//        System.out.println("res: " + res);
+        return res;
     }
 
     public static boolean rememberWinPoint(int x, int y) {
