@@ -15,12 +15,12 @@ public class MainClass {
 }
 
 class Employee{
-    String fullName;
-    int age;
-    String email;
-    String telephone;
-    String position;
-    float salary;
+    private String fullName;
+    private int age;
+    private String email;
+    private String telephone;
+    private String position;
+    private float salary;
 
     public Employee(String fullName, int age, String email, String telephone, String position, float salary) {
         this.fullName = fullName;
