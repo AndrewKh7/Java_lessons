@@ -31,9 +31,9 @@ public class MainClass {
 
 abstract class SportAnimal{
     static Random rand = new Random();
-    protected float run_distance;
-    protected float swim_distance;
-    protected float jump_height;
+    private float run_distance;
+    private float swim_distance;
+    private float jump_height;
 
     public SportAnimal(float run_distance, float swim_distance, float jump_height) {
         this.run_distance = run_distance + run_distance * (rand.nextInt(40) - 20)/100;
@@ -70,6 +70,17 @@ abstract class SportAnimal{
         System.out.println("рузельтат: " + action + ": " + res);
     }
 
+    public float getRun_distance() {
+        return run_distance;
+    }
+
+    public float getSwim_distance() {
+        return swim_distance;
+    }
+
+    public float getJump_height() {
+        return jump_height;
+    }
 }
 
 
@@ -87,7 +98,7 @@ class Cat extends SportAnimal{
     @Override
     String getInfo() {
         StringBuffer strbuf = new StringBuffer();
-        return strbuf.append("jump: ").append(this.jump_height).append(" run: ").append(this.run_distance).toString();
+        return strbuf.append("jump: ").append(this.getJump_height()).append(" run: ").append(this.getRun_distance()).toString();
     }
 }
 
@@ -100,6 +111,6 @@ class Dog extends SportAnimal{
     @Override
     String getInfo() {
         StringBuffer strbuf = new StringBuffer();
-        return strbuf.append("jump: ").append(this.jump_height).append(" run: ").append(this.run_distance).append(" swim:").append(this.swim_distance).toString();
+        return strbuf.append("jump: ").append(this.getJump_height()).append(" run: ").append(this.getRun_distance()).append(" swim:").append(this.getSwim_distance()).toString();
     }
 }
