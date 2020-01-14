@@ -15,7 +15,7 @@ public class MainClass {
         }
 
         System.out.println("-----------------------------------------");
-       Dog[] dogs = new Dog[5];
+       Dog[] dogs = new Dog[10];
         for (int i = 0; i < dogs.length; i++) {
             dogs[i] = new Dog();
             System.out.println("DOG - " + i);
@@ -24,50 +24,64 @@ public class MainClass {
             dogs[i].run(500);
             dogs[i].swim(10);
         }
+        System.out.println("_________________________________________\n");
+        System.out.println((dogs.length + cats.length) + " sports animals are ready, another 100500 is on the way!");
     }
 }
 
-abstract class Animal{
+abstract class SportAnimal{
     static Random rand = new Random();
+    protected float run_distance;
+    protected float swim_distance;
+    protected float jump_height;
 
-    abstract void run(float distance);
-    abstract void swim(float distance);
-    abstract void jump(float height);
+    public SportAnimal(float run_distance, float swim_distance, float jump_height) {
+        this.run_distance = run_distance + run_distance * (rand.nextInt(40) - 20)/100;
+        this.swim_distance = swim_distance + swim_distance * (rand.nextInt(40) - 20)/100;
+        this.jump_height = jump_height + jump_height * (rand.nextInt(40) - 20)/100;
+    }
+
+    void run(float distance) {
+        if (distance <= this.run_distance)
+            printResultAction("run", true);
+        else
+            printResultAction("run", false);
+    }
+
+    void swim(float distance) {
+        if (distance <= this.swim_distance)
+            printResultAction("swim", true);
+        else
+            printResultAction("swim", false);
+
+    }
+
+    void jump(float height) {
+        if (height <= this.jump_height)
+            printResultAction("swim", true);
+        else
+            printResultAction("swim", false);
+
+    }
+
     abstract String getInfo();
 
     void printResultAction(String action, boolean res){
         System.out.println("рузельтат: " + action + ": " + res);
     }
 
-    void tryAction(float param, float max_val){
-        if (param <= max_val)
-            printResultAction("run", true);
-        else
-            printResultAction("run", false);
-    }
 }
 
-class Cat extends Animal{
-    private float run_distance;
-    private float jump_height;
+
+class Cat extends SportAnimal{
 
     Cat(){
-        this.jump_height = 2 + 2*(rand.nextInt(40) - 20)/100;
-        this.run_distance = 200 + 200*(rand.nextInt(40)-20)/100 ;
-    }
-    @Override
-    void run(float distance) {
-        super.tryAction(distance, this.run_distance);
+        super(200,0,2);
     }
 
     @Override
     void swim(float distance) {
-        System.out.println("I can't !");
-    }
-
-    @Override
-    void jump(float height) {
-        super.tryAction(height, this.jump_height);
+        System.out.println("I cant't ");
     }
 
     @Override
@@ -77,30 +91,10 @@ class Cat extends Animal{
     }
 }
 
-class Dog extends Animal{
-    private float run_distance;
-    private float swim_distance;
-    private float jump_height;
+class Dog extends SportAnimal{
 
     Dog(){
-        this.jump_height = 0.5f + 0.5f * (rand.nextInt(40) - 20)/100;
-        this.run_distance = 500 + 500 *  (rand.nextInt(40) - 20)/100;
-        this.swim_distance =  10 + 10 *  (rand.nextInt(40) - 20)/100;
-    }
-
-    @Override
-    void run(float distance) {
-        super.tryAction(distance, this.run_distance);
-    }
-
-    @Override
-    void swim(float distance) {
-       super.tryAction(distance, this.swim_distance);
-    }
-
-    @Override
-    void jump(float height) {
-        super.tryAction(height, this.swim_distance);
+        super(500,10,0.5f);
     }
 
     @Override
