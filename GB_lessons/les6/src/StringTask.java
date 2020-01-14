@@ -10,6 +10,7 @@ public class StringTask {
     }
 
     static String splitSentenses(String str){
+        str = str.replaceAll(" +"," ");
         StringBuffer strbuf = new StringBuffer(str);
         int ru_min = 'А';
         int ru_max = 'Я';
