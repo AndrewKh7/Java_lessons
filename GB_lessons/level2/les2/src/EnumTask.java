@@ -15,13 +15,14 @@
     }
 
     public String getWorkingHours() {
-        StringBuffer str = new StringBuffer("До конца рабочей недели ");
+        StringBuffer str = new StringBuffer("До конца рабочей недели  часов");
         if (this.workingHours == 0)
             return "Сегодня выхожной!";
         else
-            return str.append(this.workingHours).append(" часов").toString();
+            return str.insert(24, this.workingHours).toString();
     }
 }
+
 public class EnumTask {
     public static void main(String[] args) {
         System.out.println(DayOfWeek.MONDAY.getWorkingHours());
