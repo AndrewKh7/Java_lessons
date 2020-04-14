@@ -1,12 +1,9 @@
 import org.w3c.dom.ls.LSOutput;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Notebook {
-    public static Map<String, ArrayList<String>> notebook = new HashMap<>();
+    public static Map<String, HashSet<String>> notebook = new HashMap<>();
     public static void main(String[] args){
         add("Lera","+123");
         add("Lera", "+321");
@@ -27,7 +24,7 @@ public class Notebook {
 
     static void add(String surname, String number){
         if(!notebook.containsKey(surname))
-            notebook.put(surname,new ArrayList<>());
+            notebook.put(surname,new HashSet<>());
         notebook.get(surname).add(number);
     }
 
