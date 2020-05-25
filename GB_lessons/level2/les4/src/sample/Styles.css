@@ -1,0 +1,22 @@
+.root{
+    -fx-padding: 5px;
+    -fx-vgap: 5px;
+    -fx-hgap: 5px;
+
+}
+#inputTextField{
+    -fx-pref-width: 100px;
+    -fx-hgap: 5px;
+}
+
+#sendButton{
+    -fx-color: white;
+    -fx-alignment: top-right;
+    -fx-hgap: 5px;
+}
+
+#hbox{
+    -fx-alignment: center;
+    -fx-hgap: 5px;
+    -fx-vgap: 5px;
+}
