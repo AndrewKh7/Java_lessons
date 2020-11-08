@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/FilesPath/FilesPath.iml" filepath="$PROJECT_DIR$/FilesPath/FilesPath.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringDataTest/SpringDataTest.iml" filepath="$PROJECT_DIR$/SpringDataTest/SpringDataTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/playground.iml" filepath="$PROJECT_DIR$/playground.iml" />
     </modules>
   </component>
