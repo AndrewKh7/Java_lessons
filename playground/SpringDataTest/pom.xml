@@ -11,7 +11,7 @@
         <spring.version>5.2.10.RELEASE</spring.version>
         <springdata.version>2.3.5.RELEASE</springdata.version>
         <hb.version>5.4.23.Final</hb.version>
-        <ps.version>42.2.17</ps.version>
+        <ps.version>42.4.1</ps.version>
     </properties>
 
 
